@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { urlBase64ToUint8Array } from '../utils/push'
 
 const PUBLIC_VAPID_KEY =
-  'BFDchpxElajVPvlg-NR1W1BK6PSrucQB0i7BkhDfYsHWKqoB4MQLGJoKs518nQnMHpQ3sM63DiG3SQRY1obh6tg'
+  'BC00oEsfu29umm4YaTeVdg0SFax9LQj7bDfy34K4FAf-FXH0-t1EIDsMlm8XKIHY9YZS5aeEgMCBfq4jsE05djE'
 
 export const usePushNotification = () => {
   const [pushSubscription, setPushSubscription] = useState(null)
