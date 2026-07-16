@@ -47,12 +47,6 @@ export default function AdminGuard({ children }) {
     }
   }
 
-  // Fungsi Logout sederhana jika nanti kamu butuh tombol Keluar
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    setIsAuth(false)
-  }
-
   if (!isAuth) {
     return (
       <div

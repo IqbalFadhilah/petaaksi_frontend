@@ -28,6 +28,7 @@ body {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
 }
 
 /* HEADER STYLE STYLE */
@@ -59,7 +60,11 @@ body {
 }
 .view-toggle button.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-.public-view { width: 100%; height: calc(100vh - 65px); position: relative; }
+.public-view { 
+  width: 100%; 
+  height: calc(100dvh - 65px); /* 🚀 Ubah vh jadi dvh di sini */
+  position: relative; 
+}
 .leaflet-container { width: 100%; height: 100%; }
 
 .fab {
@@ -419,7 +424,13 @@ body {
 /* ========================================= */
 /* BACKEND ADMIN PANEL LAYOUT SYSTEM         */
 /* ========================================= */
-.dashboard-layout { display: grid; grid-template-columns: 240px 1fr; height: calc(100vh - 65px); width: 100%; box-sizing: border-box; }
+.dashboard-layout { 
+  display: grid; 
+  grid-template-columns: 240px 1fr; 
+  height: calc(100dvh - 65px); 
+  width: 100%; 
+  box-sizing: border-box; 
+}
 .sidebar { background: #111827; color: #9ca3af; padding: 24px 16px; height: 100%; box-sizing: border-box; }
 .sidebar-brand { display: flex; align-items: center; gap: 10px; color: white; font-weight: 700; margin-bottom: 24px; font-size: 0.88rem; }
 .sidebar-nav { display: flex; flex-direction: column; gap: 6px; }

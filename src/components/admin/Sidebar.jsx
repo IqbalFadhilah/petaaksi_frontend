@@ -1,8 +1,12 @@
-import { Database, LayoutDashboard, LogOut, MapPinned, ShieldCheck } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { LayoutDashboard, LogOut, MapPinned } from 'lucide-react'
 
 export default function Sidebar() {
-  const navigate = useNavigate()
+  
+  // 🚪 Fungsi untuk Hapus Token JWT dan Kembali ke Peta Publik
+  const handleLogout = () => {
+    localStorage.removeItem('token') // Menghapus kartu akses login admin
+    window.location.href = '/' // Pindah ke halaman utama (Public Map) & refresh total
+  }
 
   return (
     <aside className="sidebar">
@@ -13,12 +17,13 @@ export default function Sidebar() {
         <button className="nav-item active">
           <LayoutDashboard size={18} /> Overview
         </button>
+        
         <button
           className="nav-item"
-          onClick={() => navigate('/')}
-          style={{ marginTop: 'auto', color: '#f87171' }}
+          onClick={handleLogout} 
+          style={{ marginTop: 'auto', color: '#f87171', cursor: 'pointer' }}
         >
-          <LogOut size={18} /> Keluar / Public Map
+          <LogOut size={18} /> Keluar
         </button>
       </nav>
     </aside>
