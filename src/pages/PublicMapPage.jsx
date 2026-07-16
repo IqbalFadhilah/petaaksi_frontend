@@ -46,13 +46,8 @@ export default function PublicMapPage() {
           lng: pos.coords.longitude,
         }
 
-        // 🛡️ Satpam Tambahan: Deteksi Kotak Geografis Negara Singapura
-        const isSingapore = 
-          nextLokasi.lat >= 1.15 && nextLokasi.lat <= 1.5 && 
-          nextLokasi.lng >= 103.5 && nextLokasi.lng <= 104.5;
-
         // Jika masuk kotak Indonesia DAN bukan di dalam teritori Singapura
-        if (isLocationInIndonesia(nextLokasi) && !isSingapore) {
+        if (isLocationInIndonesia(nextLokasi)) {
           setLokasi(nextLokasi)
           setShowForm(true) // 🚀 BARU BOLEH BUKA MODAL DI SINI (Kondisi Aman & Valid)
           return
