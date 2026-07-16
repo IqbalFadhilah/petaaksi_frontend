@@ -1,5 +1,6 @@
-import { Map, MapPinned } from 'lucide-react'
+import { Map } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import logoWeb from '../assets/logo-web-petaaksi.png' 
 
 export default function Header({ showPublicMapButton = false }) {
   const navigate = useNavigate()
@@ -7,13 +8,17 @@ export default function Header({ showPublicMapButton = false }) {
   return (
     <header className="header">
       <div className="brand-wrapper">
-        <div className="app-logo">
-          <MapPinned size={18} />
-        </div>
-        <div className="brand-text">
-          <h1>PetaAksi</h1>
-          <span>Spatially-Validated Crowdsourcing Platform</span>
-        </div>
+        {/* 🚀 Cukup panggil gambar logonya langsung, tanpa div text atau span lagi */}
+        <img 
+          src={logoWeb} 
+          alt="PetaAksi Logo" 
+          onClick={() => navigate('/')} 
+          style={{ 
+            height: '40px', // Sedikit dinaikkan ke 40px biar lebih kelihatan tegas
+            objectFit: 'contain', 
+            cursor: 'pointer'
+          }} 
+        />
       </div>
 
       {showPublicMapButton && (

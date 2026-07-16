@@ -26,12 +26,12 @@ export default defineConfig({
         display: 'standalone',       // WAJIB: Membuat aplikasi full-screen tanpa UI browser saat diinstal
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: 'logo-aplikasi-petaaksi-192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512.png',
+            src: 'logo-aplikasi-petaaksi-512.png',
             sizes: '512x512',
             type: 'image/png'
           }
