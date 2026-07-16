@@ -31,7 +31,7 @@ export default function PublicMapPage() {
   }
 
   const handleBukaForm = () => {
-    setShowForm(true)
+    // 🚨 HAPUS setShowForm(true) dari sini agar modal tidak curi start!
     setLokasi(null)
 
     if (!navigator.geolocation) {
@@ -46,15 +46,23 @@ export default function PublicMapPage() {
           lng: pos.coords.longitude,
         }
 
-        if (isLocationInIndonesia(nextLokasi)) {
+        // 🛡️ Satpam Tambahan: Deteksi Kotak Geografis Negara Singapura
+        const isSingapore = 
+          nextLokasi.lat >= 1.15 && nextLokasi.lat <= 1.5 && 
+          nextLokasi.lng >= 103.5 && nextLokasi.lng <= 104.5;
+
+        // Jika masuk kotak Indonesia DAN bukan di dalam teritori Singapura
+        if (isLocationInIndonesia(nextLokasi) && !isSingapore) {
           setLokasi(nextLokasi)
+          setShowForm(true) // 🚀 BARU BOLEH BUKA MODAL DI SINI (Kondisi Aman & Valid)
           return
         }
 
+        // 🛑 Jika terdeteksi di luar negeri (termasuk Singapura)
         alert(
           'Sistem mendeteksi lokasi di luar jangkauan. Aplikasi PetaAksi saat ini hanya menerima laporan dari wilayah Indonesia.',
         )
-        setShowForm(false)
+        // 🚨 setShowForm(false) di sini hapus saja karena modalnya emang belum dibuka
       },
       (error) => {
         console.error('Gagal mendapatkan lokasi:', error)
