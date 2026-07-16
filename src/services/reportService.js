@@ -16,7 +16,19 @@ export const fetchReports = async () => {
 }
 
 export const updateReportStatus = (reportId, status) => {
-  return axios.put(`${API_URL}/reports/${reportId}`, { status })
+  // 🔑 Ambil token JWT yang tersimpan di memori browser
+  const token = localStorage.getItem('token') 
+
+  // 🛡️ Selipkan token ke dalam config headers Axios sebagai Bearer Token
+  return axios.put(
+    `${API_URL}/reports/${reportId}`, 
+    { status },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
 }
 
 export const submitReport = (formData) => {
