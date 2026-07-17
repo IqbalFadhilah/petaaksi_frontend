@@ -42,13 +42,18 @@ self.addEventListener('activate', (event) => {
 
 // Event FETCH: Satpam yang bertugas mengambilkan file dari Cache saat Offline
 self.addEventListener('fetch', (event) => {
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  // Satpam 1: Hanya tangani request pembacaan data (GET). 
+  // Request POST (kirim laporan) GAK BOLEH masuk cache karena bisa error.
+  if (event.request.method !== 'GET') return;
 
   event.respondWith(
+    // 🌐 Langkah 1: Coba minta data terbaru ke internet/backend dulu
     fetch(event.request)
       .then((networkResponse) => {
+        // Jika internet lancar dan dapat data (status 200)
         if (networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
+          // Buka gudang cache dan perbarui data riwayat laporan terbaru
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
@@ -56,10 +61,13 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       })
       .catch(() => {
+        //JIKA OFFLINE (Internet Mati), otomatis ambil riwayat terakhir dari Cache!
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) {
-            return cachedResponse;
+            return cachedResponse; // <<--- Pin laporan terakhir bakal muncul di sini!
           }
+          
+          // Jika yang dibuka adalah perpindahan halaman, kembalikan ke index.html PWA
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
@@ -78,8 +86,8 @@ self.addEventListener('push', function(event) {
     
     const options = {
       body: data.body,
-      icon: '/logo192.png', // ⚠️ Sesuaikan dengan nama file icon di folder public-mu
-      badge: '/logo192.png',
+      icon: '/logo-aplikasi-petaaksi-192.png', 
+      badge: '/logo-aplikasi-petaaksi-192.png',
       vibrate: [200, 100, 200], 
       data: {
         url: data.url || '/' 
