@@ -14,7 +14,7 @@ export default function PublicBottomSheet({ selectedGroup, onClose, onImageClick
 
       <div className="sheet-tag">DEMONSTRASI</div>
       <h2 className="sheet-title">
-        {firstReport?.description.substring(0, 45) || 'Aksi Massa Lapangan'}
+        {firstReport?.title || firstReport?.description.substring(0, 45) || 'Aksi Massa Lapangan'}
       </h2>
 
       <div className="sheet-badge-row">
@@ -69,6 +69,7 @@ export default function PublicBottomSheet({ selectedGroup, onClose, onImageClick
                 </div>
                 <div className="child-content">
                   <span className="child-name">{child.pelapor || 'Anonim'}</span>
+                  {child.title && <span className="child-title">{child.title}</span>}
                   <p className="child-desc">{child.description}</p>
                 </div>
 

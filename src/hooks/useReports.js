@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { fetchReports } from '../services/reportService'
+import { fetchAdminReports, fetchReports } from '../services/reportService'
 
-export const useReports = () => {
+export const useReports = ({ admin = false, archived = false } = {}) => {
   const [laporan, setLaporan] = useState([])
   const [refresh, setRefresh] = useState(0)
 
@@ -12,7 +12,7 @@ export const useReports = () => {
   useEffect(() => {
     const ambilData = async () => {
       try {
-        const data = await fetchReports()
+        const data = admin ? await fetchAdminReports(archived) : await fetchReports()
         setLaporan(data)
       } catch (error) {
         console.error('Gagal ambil data:', error)
@@ -20,7 +20,7 @@ export const useReports = () => {
     }
 
     ambilData()
-  }, [refresh])
+  }, [refresh, admin, archived])
 
   return { laporan, refreshReports }
 }

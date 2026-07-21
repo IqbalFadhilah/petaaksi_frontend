@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 import AdminGuard from './components/AdminGuard'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import PublicMapPage from './pages/PublicMapPage'
+import LandingPage from './pages/LandingPage'
 import './App.css'
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -21,7 +22,8 @@ L.Icon.Default.mergeOptions({
 function AppContent() {
   return (
     <Routes>
-      <Route path="/" element={<PublicMapPage />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/peta" element={<PublicMapPage />} />
       <Route
         path="/admin"
         element={

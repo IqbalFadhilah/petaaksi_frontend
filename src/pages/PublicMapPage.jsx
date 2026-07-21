@@ -19,8 +19,15 @@ export default function PublicMapPage() {
   const pushSubscription = usePushNotification()
 
   const [showForm, setShowForm] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [lokasi, setLokasi] = useState(null)
-  const [formInput, setFormInput] = useState({ pelapor: '', description: '', foto: null })
+  const [formInput, setFormInput] = useState({
+    pelapor: '',
+    title: '',
+    description: '',
+    foto: null,
+    isDeclarationAccepted: false,
+  })
   const [selectedGroup, setSelectedGroup] = useState(null)
   const [fullscreenImage, setFullscreenImage] = useState(null)
 
@@ -69,6 +76,8 @@ export default function PublicMapPage() {
   const kirimLaporan = async (event) => {
     event.preventDefault()
 
+    if (isSubmitting) return
+
     if (!lokasi) {
       alert('Mohon izinkan akses GPS!')
       return
@@ -76,6 +85,7 @@ export default function PublicMapPage() {
 
     const formData = new FormData()
     formData.append('pelapor', formInput.pelapor)
+    formData.append('title', formInput.title)
     formData.append('description', formInput.description)
     formData.append('latitude', lokasi.lat)
     formData.append('longitude', lokasi.lng)
@@ -87,14 +97,23 @@ export default function PublicMapPage() {
     }
 
     try {
+      setIsSubmitting(true)
       await submitReport(formData)
       setShowForm(false)
-      setFormInput({ pelapor: '', description: '', foto: null })
+      setFormInput({
+        pelapor: '',
+        title: '',
+        description: '',
+        foto: null,
+        isDeclarationAccepted: false,
+      })
       refreshReports()
       alert('Laporan Terkirim!')
     } catch (error) {
       console.error('Error Kirim:', error)
       alert('Gagal kirim.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -139,7 +158,8 @@ export default function PublicMapPage() {
           show={showForm}
           lokasi={lokasi}
           formInput={formInput}
-          onClose={() => setShowForm(false)}
+          isSubmitting={isSubmitting}
+          onClose={() => !isSubmitting && setShowForm(false)}
           onSubmit={kirimLaporan}
           onChangeForm={updateFormInput}
         />

@@ -14,6 +14,7 @@ export default function ReportGroupTable({
   onToggleExpand,
   onApproveGroup,
   onRejectGroup,
+  onRejectReport,
   onImageClick,
 }) {
   return (
@@ -82,13 +83,22 @@ export default function ReportGroupTable({
                       />
                       <div>
                         <strong>Kontributor: {report.pelapor}</strong>
+                        {report.title && <p className="report-title">{report.title}</p>}
                         <p>{report.description}</p>
                         <small style={{ fontFamily: 'monospace', color: '#999' }}>
                           Lat: {report.latitude} | Lng: {report.longitude}
                         </small>
                       </div>
                     </div>
-                    <span className="child-status">Sub-Node Laporan</span>
+                    <div className="child-report-actions">
+                      <span className="child-status">Sub-Node Laporan</span>
+                      <button
+                        className="reject-report-btn"
+                        onClick={() => onRejectReport(report)}
+                      >
+                        Tolak Laporan
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

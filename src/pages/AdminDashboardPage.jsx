@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import GlobalLightbox from '../components/GlobalLightbox'
 import Header from '../components/Header'
+import HistoryReportTable from '../components/admin/HistoryReportTable'
 import PendingMap from '../components/admin/PendingMap'
 import ReportGroupTable from '../components/admin/ReportGroupTable'
 import Sidebar from '../components/admin/Sidebar'
@@ -10,9 +11,11 @@ import { updateReportStatus } from '../services/reportService'
 import { buildReportGroups, buildReportStats } from '../utils/clustering'
 
 export default function AdminDashboardPage() {
-  const { laporan, refreshReports } = useReports()
+  const { laporan, refreshReports } = useReports({ admin: true })
+  const { laporan: laporanHistory } = useReports({ admin: true, archived: true })
   const [expandedRows, setExpandedRows] = useState([])
   const [fullscreenImage, setFullscreenImage] = useState(null)
+  const [activeView, setActiveView] = useState('overview')
 
   const groupsData = useMemo(() => buildReportGroups(laporan), [laporan])
   const stats = useMemo(() => buildReportStats(laporan, groupsData), [laporan, groupsData])
@@ -41,24 +44,48 @@ export default function AdminDashboardPage() {
     }
   }
 
+  const handleRejectReport = async (report) => {
+    const shouldReject = window.confirm(
+      `Tolak laporan dari ${report.pelapor || 'pelapor ini'}? Pelapor akan menerima notifikasi.`,
+    )
+
+    if (!shouldReject) return
+
+    try {
+      await updateReportStatus(report.id, 'rejected')
+      refreshReports()
+      alert('Laporan berhasil ditolak dan notifikasi telah diproses.')
+    } catch (error) {
+      console.error('Laporan gagal ditolak:', error)
+      alert('Gagal menolak laporan.')
+    }
+  }
+
   return (
     <div className="app-shell">
       <Header showPublicMapButton />
 
       <section className="dashboard-layout">
-        <Sidebar />
+        <Sidebar activeView={activeView} onChangeView={setActiveView} />
 
         <main className="dashboard-main">
-          <StatsGrid stats={stats} />
-          <PendingMap laporan={laporan} />
-          <ReportGroupTable
-            groups={groupsData.pending}
-            expandedRows={expandedRows}
-            onToggleExpand={toggleExpand}
-            onApproveGroup={handleApproveGrup}
-            onRejectGroup={handleRejectGrup}
-            onImageClick={setFullscreenImage}
-          />
+          {activeView === 'overview' ? (
+            <>
+              <StatsGrid stats={stats} />
+              <PendingMap laporan={laporan} />
+              <ReportGroupTable
+                groups={groupsData.pending}
+                expandedRows={expandedRows}
+                onToggleExpand={toggleExpand}
+                onApproveGroup={handleApproveGrup}
+                onRejectGroup={handleRejectGrup}
+                onRejectReport={handleRejectReport}
+                onImageClick={setFullscreenImage}
+              />
+            </>
+          ) : (
+            <HistoryReportTable reports={laporanHistory} onImageClick={setFullscreenImage} />
+          )}
         </main>
       </section>
 

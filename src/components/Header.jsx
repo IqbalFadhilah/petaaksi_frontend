@@ -12,7 +12,7 @@ export default function Header({ showPublicMapButton = false }) {
         <img 
           src={logoWeb} 
           alt="PetaAksi Logo" 
-          onClick={() => navigate('/')} 
+          onClick={() => navigate('/peta')} 
           style={{ 
             height: '40px', // Sedikit dinaikkan ke 40px biar lebih kelihatan tegas
             objectFit: 'contain', 
@@ -23,7 +23,7 @@ export default function Header({ showPublicMapButton = false }) {
 
       {showPublicMapButton && (
         <div className="view-toggle">
-          <button onClick={() => navigate('/')}>
+          <button onClick={() => navigate('/peta')}>
             <Map size={16} /> Kembali ke Peta Publik
           </button>
         </div>

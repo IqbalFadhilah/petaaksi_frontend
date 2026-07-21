@@ -1,6 +1,6 @@
-import { LayoutDashboard, LogOut, MapPinned } from 'lucide-react'
+import { History, LayoutDashboard, LogOut, MapPinned } from 'lucide-react'
 
-export default function Sidebar() {
+export default function Sidebar({ activeView, onChangeView }) {
   
   // 🚪 Fungsi untuk Hapus Token JWT dan Kembali ke Peta Publik
   const handleLogout = () => {
@@ -14,8 +14,17 @@ export default function Sidebar() {
         <MapPinned size={18} /> <span>Menu Validasi</span>
       </div>
       <nav className="sidebar-nav">
-        <button className="nav-item active">
+        <button
+          className={`nav-item ${activeView === 'overview' ? 'active' : ''}`}
+          onClick={() => onChangeView('overview')}
+        >
           <LayoutDashboard size={18} /> Overview
+        </button>
+        <button
+          className={`nav-item ${activeView === 'history' ? 'active' : ''}`}
+          onClick={() => onChangeView('history')}
+        >
+          <History size={18} /> History Laporan
         </button>
         
         <button

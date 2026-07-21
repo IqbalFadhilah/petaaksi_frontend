@@ -15,6 +15,15 @@ export const fetchReports = async () => {
   return response.data
 }
 
+export const fetchAdminReports = async (archived = false) => {
+  const token = localStorage.getItem('token')
+  const path = archived ? '/admin/reports/history' : '/admin/reports'
+  const response = await axios.get(`${API_URL}${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  return response.data
+}
+
 export const updateReportStatus = (reportId, status) => {
   // 🔑 Ambil token JWT yang tersimpan di memori browser
   const token = localStorage.getItem('token') 
