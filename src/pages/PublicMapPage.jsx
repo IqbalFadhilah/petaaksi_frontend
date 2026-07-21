@@ -83,6 +83,11 @@ export default function PublicMapPage() {
       return
     }
 
+    if (!formInput.foto) {
+      alert('Mohon pilih foto bukti kejadian.')
+      return
+    }
+
     const formData = new FormData()
     formData.append('pelapor', formInput.pelapor)
     formData.append('title', formInput.title)

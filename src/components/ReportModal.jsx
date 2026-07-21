@@ -68,12 +68,10 @@ export default function ReportModal({
 
           <div className="form-group">
             <label>Foto Bukti Kejadian</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => onChangeForm({ foto: event.target.files[0] })}
+            <PhotoUpload
+              value={formInput.foto}
+              onChange={(foto) => onChangeForm({ foto })}
               disabled={isSubmitting}
-              required
             />
           </div>
 
@@ -102,3 +100,4 @@ export default function ReportModal({
     </div>
   )
 }
+import PhotoUpload from './PhotoUpload'
