@@ -116,7 +116,10 @@ export default function PublicMapPage() {
       alert('Laporan Terkirim!')
     } catch (error) {
       console.error('Error Kirim:', error)
-      alert('Gagal kirim.')
+      const message = error.code === 'ECONNABORTED'
+        ? 'Pengiriman terlalu lama. Silakan coba lagi.'
+        : error.response?.data?.message || 'Gagal mengirim laporan. Silakan coba lagi.'
+      alert(message)
     } finally {
       setIsSubmitting(false)
     }

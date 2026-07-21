@@ -41,5 +41,5 @@ export const updateReportStatus = (reportId, status) => {
 }
 
 export const submitReport = (formData) => {
-  return axios.post(`${API_URL}/reports`, formData)
+  return axios.post(`${API_URL}/reports`, formData, { timeout: 30000 })
 }
