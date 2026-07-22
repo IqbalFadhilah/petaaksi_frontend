@@ -469,6 +469,43 @@ body {
 .stat-card span { font-size: 0.78rem; color: #6b7280; }
 
 .panel { background: white; border-radius: 14px; box-shadow: var(--shadow); border: 1px solid #e5e7eb; overflow: hidden; }
+.report-cluster-icon {
+  background: transparent;
+  border: 0;
+}
+.report-cluster-marker {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+.report-cluster-count {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--cluster-color);
+  box-shadow: 0 3px 10px color-mix(in srgb, var(--cluster-color) 45%, transparent);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.report-cluster-pulse {
+  position: absolute;
+  inset: 4px;
+  border: 2px solid var(--cluster-color);
+  border-radius: 50%;
+  animation: reportClusterPulse 2s ease-out infinite;
+}
+@keyframes reportClusterPulse {
+  0% { opacity: .7; transform: scale(.8); }
+  70%, 100% { opacity: 0; transform: scale(1.45); }
+}
 .panel-header { padding: 20px 24px; border-bottom: 1px solid #edf2f7; }
 .panel-header h2 { margin: 0; font-size: 1.1rem; color: #111827; }
 .panel-header p { margin: 4px 0 0; color: #6b7280; font-size: 0.8rem; }

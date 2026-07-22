@@ -24,6 +24,10 @@ export default function AdminDashboardPage() {
     setExpandedRows((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
   }
 
+  const handleSelectGroup = (group) => {
+    setExpandedRows((prev) => (prev.includes(group.id) ? prev : [...prev, group.id]))
+  }
+
   const handleApproveGrup = async (reportList) => {
     try {
       await Promise.all(reportList.map((item) => updateReportStatus(item.id, 'verified')))
@@ -72,7 +76,7 @@ export default function AdminDashboardPage() {
           {activeView === 'overview' ? (
             <>
               <StatsGrid stats={stats} />
-              <PendingMap laporan={laporan} />
+              <PendingMap groups={groupsData.pending} onSelectGroup={handleSelectGroup} />
               <ReportGroupTable
                 groups={groupsData.pending}
                 expandedRows={expandedRows}
