@@ -1,27 +1,16 @@
 import L from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { defaultMapCenter } from '../../constants/map'
-
-const clusterStyles = {
-  high: { color: '#15803d', label: 'Validitas tinggi' },
-  medium: { color: '#d97706', label: 'Validitas sedang' },
-  low: { color: '#6b7280', label: 'Validitas rendah' },
-}
-
-const getClusterStyle = (cluster) => {
-  if (cluster.reports.length >= 3 || cluster.status === 'high') return clusterStyles.high
-  if (cluster.reports.length === 2) return clusterStyles.medium
-  return clusterStyles.low
-}
+import { getValidityInfo } from '../../utils/reportHelper'
 
 const createClusterIcon = (cluster) => {
-  const { color, label } = getClusterStyle(cluster)
   const reportCount = cluster.reports.length
+  const { label, markerColor } = getValidityInfo(reportCount)
 
   return L.divIcon({
     className: 'report-cluster-icon',
     html: `
-      <div class="report-cluster-marker" style="--cluster-color: ${color}" aria-label="${label}, ${reportCount} laporan">
+      <div class="report-cluster-marker" style="--cluster-color: ${markerColor}" aria-label="${label}, ${reportCount} laporan">
         <span class="report-cluster-pulse"></span>
         <span class="report-cluster-count">${reportCount}</span>
       </div>
@@ -41,7 +30,7 @@ export default function PendingMap({ groups = [], onSelectGroup }) {
         <MapContainer center={defaultMapCenter} zoom={11} style={{ height: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {groups.map((cluster) => {
-            const { label } = getClusterStyle(cluster)
+            const { label } = getValidityInfo(cluster.reports.length)
 
             return (
               <Marker

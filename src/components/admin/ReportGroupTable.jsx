@@ -7,6 +7,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { getUploadUrl } from '../../services/reportService'
+import { getValidityInfo } from '../../utils/reportHelper'
 
 export default function ReportGroupTable({
   groups,
@@ -27,6 +28,7 @@ export default function ReportGroupTable({
       <div className="group-table">
         {groups.map((group) => {
           const expanded = expandedRows.includes(group.id)
+          const validity = getValidityInfo(group.reports.length)
 
           return (
             <div key={group.id} className="group-card">
@@ -50,15 +52,10 @@ export default function ReportGroupTable({
 
                 <div className="group-badges">
                   <span className="badge neutral">Konsensus: {group.reports.length} Pelapor</span>
-                  {group.reports.length > 1 ? (
-                    <span className="badge green">
-                      <ShieldCheck size={14} /> Validitas Tinggi
-                    </span>
-                  ) : (
-                    <span className="badge yellow">
-                      <AlertTriangle size={14} /> Kredibilitas Tunggal
-                    </span>
-                  )}
+                  <span className={`badge validity-badge ${validity.badgeStyle}`}>
+                    {validity.status === 'high' ? <ShieldCheck size={14} /> : <AlertTriangle size={14} />}
+                    {validity.label}
+                  </span>
                 </div>
 
                 <div className="group-actions">

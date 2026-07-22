@@ -586,6 +586,10 @@ body {
 .badge.neutral { background: #f3f4f6; color: #4b5563; }
 .badge.green { background: #d4edda; color: #155724; }
 .badge.yellow { background: #fff3cd; color: #856404; }
+.validity-badge { border: 1px solid transparent; }
+.bg-emerald-100 { background: #d1fae5; }.text-emerald-800 { color: #065f46; }.border-emerald-200 { border-color: #a7f3d0; }
+.bg-amber-100 { background: #fef3c7; }.text-amber-800 { color: #92400e; }.border-amber-200 { border-color: #fde68a; }
+.bg-rose-100 { background: #ffe4e6; }.text-rose-800 { color: #9f1239; }.border-rose-200 { border-color: #fecdd3; }
 
 /* ANIMATION */
 @keyframes slideUp {

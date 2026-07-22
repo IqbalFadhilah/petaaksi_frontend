@@ -1,4 +1,6 @@
 // 1. Fungsi Matematika Haversine untuk hitung jarak riil (satuan Meter)
+import { getValidityInfo } from './reportHelper'
+
 const calculateHaversineDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371000 // Jari-jari bumi dalam meter
   const dLat = ((lat2 - lat1) * Math.PI) / 180
@@ -52,7 +54,10 @@ export const buildReportGroups = (laporan) => {
         title: isPending
           ? `Indikasi Aksi Massa: ${report.title || report.description.substring(0, 30)}${report.title ? '' : '...'}`
           : report.title || 'Aksi Massa di Kawasan Terkait',
-        location: 'Bandung, Jawa Barat',
+        location:
+          report.location_name ||
+          report.address ||
+          `Koordinat ${Number(report.latitude).toFixed(5)}, ${Number(report.longitude).toFixed(5)}`,
         time: report.created_at
           ? `${new Date(report.created_at).toLocaleTimeString('id-ID', {
               hour: '2-digit',
@@ -65,14 +70,16 @@ export const buildReportGroups = (laporan) => {
         maxDistance: 20, 
         latitude: report.latitude,
         longitude: report.longitude,
-        status: report.nearby_count > 0 || targetArray.length > 1 ? 'high' : 'low',
         image_url: report.image_url,
         description: report.description,
         reports: [report],
       })
     })
 
-    return clusters
+    return clusters.map((cluster) => ({
+      ...cluster,
+      status: getValidityInfo(cluster.reports.length).status,
+    }))
   }
 
   return {
