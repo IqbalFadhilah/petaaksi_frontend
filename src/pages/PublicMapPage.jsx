@@ -13,6 +13,34 @@ import { submitReport } from '../services/reportService'
 import { buildReportGroups } from '../utils/clustering'
 import { isLocationInIndonesia } from '../utils/geo'
 
+const LAST_REPORT_LOCATION_KEY = 'petaaksi:last-report-location'
+
+const getLastReportLocation = () => {
+  try {
+    const savedLocation = JSON.parse(localStorage.getItem(LAST_REPORT_LOCATION_KEY))
+    const location = {
+      lat: Number(savedLocation?.lat),
+      lng: Number(savedLocation?.lng),
+    }
+
+    return Number.isFinite(location.lat) &&
+      Number.isFinite(location.lng) &&
+      isLocationInIndonesia(location)
+      ? location
+      : null
+  } catch {
+    return null
+  }
+}
+
+const saveLastReportLocation = (location) => {
+  try {
+    localStorage.setItem(LAST_REPORT_LOCATION_KEY, JSON.stringify(location))
+  } catch (error) {
+    console.warn('Lokasi laporan terakhir tidak dapat disimpan:', error)
+  }
+}
+
 function MapLocationController({ location }) {
   const map = useMap()
 
@@ -42,6 +70,7 @@ export default function PublicMapPage() {
   })
   const [selectedGroup, setSelectedGroup] = useState(null)
   const [fullscreenImage, setFullscreenImage] = useState(null)
+  const [initialMapLocation] = useState(getLastReportLocation)
 
   const groupsData = useMemo(() => buildReportGroups(laporan), [laporan])
 
@@ -124,6 +153,7 @@ export default function PublicMapPage() {
         foto: null,
         isDeclarationAccepted: false,
       })
+      saveLastReportLocation(lokasi)
       refreshReports()
       alert('Laporan Terkirim!')
     } catch (error) {
@@ -143,7 +173,9 @@ export default function PublicMapPage() {
 
       <section className="public-view">
         <MapContainer
-          center={defaultMapCenter}
+          center={initialMapLocation
+            ? [initialMapLocation.lat, initialMapLocation.lng]
+            : defaultMapCenter}
           zoom={defaultMapZoom}
           minZoom={5}
           maxBounds={indonesiaBounds}

@@ -1,6 +1,6 @@
 import L from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { defaultMapCenter, defaultMapZoom } from '../../constants/map'
+import { defaultMapCenter } from '../../constants/map'
 import { getValidityInfo } from '../../utils/reportHelper'
 
 const createClusterIcon = (cluster) => {
@@ -27,7 +27,7 @@ export default function PendingMap({ groups = [], onSelectGroup }) {
         Peta Distribusi Node Spasial (Pending)
       </h2>
       <div style={{ height: '300px', borderRadius: '12px', overflow: 'hidden' }}>
-        <MapContainer center={defaultMapCenter} zoom={defaultMapZoom} style={{ height: '100%' }}>
+        <MapContainer center={defaultMapCenter} zoom={11} style={{ height: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {groups.map((cluster) => {
             const { label } = getValidityInfo(cluster.reports.length)

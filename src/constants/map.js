@@ -3,5 +3,5 @@ export const indonesiaBounds = [
   [-11, 141],
 ]
 
-export const defaultMapCenter = [-2.5489, 118.0149]
-export const defaultMapZoom = 5
+export const defaultMapCenter = [-6.2, 106.816666]
+export const defaultMapZoom = 13
