@@ -554,15 +554,15 @@ body {
 .history-empty { padding: 36px 24px; color: #6b7280; font-size: 0.86rem; text-align: center; }
 
 /* MODALS SUBMITS */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: -1; opacity: 0; transition: opacity 0.2s ease; }
+.modal-overlay { position: fixed; inset: 0; padding: 16px; box-sizing: border-box; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; overflow-y: auto; z-index: -1; opacity: 0; transition: opacity 0.2s ease; }
 .modal-overlay.show { z-index: 99999 !important; opacity: 1; }
-.report-modal { background: white; padding: 26px; border-radius: 16px; width: 90%; max-width: 400px; height: calc(100dvh - 32px); box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow); animation: slideUp 0.3s ease-out forwards; }
+.report-modal { background: white; padding: 20px 20px 24px; border-radius: 16px; width: 100%; max-width: 400px; max-height: 85dvh; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; box-shadow: var(--shadow); animation: slideUp 0.3s ease-out forwards; }
 .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
 .modal-header h2 { margin: 0; font-size: 1.15rem; color: #111827; }
 .modal-header p { margin: 4px 0 0; color: #6b7280; font-size: 0.78rem; }
 .close-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
 .report-form .form-group { margin-bottom: 12px; }
-.report-form { flex: 1; min-height: 0; overflow-y: auto; padding-right: 4px; }
+.report-form { flex: 1; min-height: 0; padding-right: 4px; }
 .report-form::-webkit-scrollbar { width: 6px; }.report-form::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; }
 .report-form label { display: block; font-size: 0.78rem; font-weight: 600; margin-bottom: 4px; color: #374151; }
 .report-form input, .report-form textarea { width: 100%; padding: 11px; border: 1px solid #e5e7eb; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 0.88rem; }
@@ -614,7 +614,7 @@ body {
   .history-thumb { width: 64px; height: 64px; }
   .child-report { padding: 12px 16px; gap: 12px; align-items: flex-start; }
   .child-report-actions { flex-direction: column; align-items: flex-end; }
-  .report-modal { width: calc(100% - 24px); height: calc(100dvh - 24px); padding: 20px; }
+  .report-modal { width: 100%; padding: 20px 20px 24px; }
 }
 
 @keyframes buttonSpin {
