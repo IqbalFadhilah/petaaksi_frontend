@@ -1,17 +1,29 @@
-import { useMemo, useState } from 'react'
-import { MapContainer, Marker, TileLayer } from 'react-leaflet'
+import { useEffect, useMemo, useState } from 'react'
+import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
 import { Plus } from 'lucide-react'
 import GlobalLightbox from '../components/GlobalLightbox'
 import Header from '../components/Header'
 import PublicBottomSheet from '../components/PublicBottomSheet'
 import ReportModal from '../components/ReportModal'
-import { defaultMapCenter, indonesiaBounds } from '../constants/map'
+import { defaultMapCenter, defaultMapZoom, indonesiaBounds } from '../constants/map'
 import { useDeviceId } from '../hooks/useDeviceId'
 import { usePushNotification } from '../hooks/usePushNotification'
 import { useReports } from '../hooks/useReports'
 import { submitReport } from '../services/reportService'
 import { buildReportGroups } from '../utils/clustering'
 import { isLocationInIndonesia } from '../utils/geo'
+
+function MapLocationController({ location }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (location) {
+      map.flyTo([location.lat, location.lng], 13)
+    }
+  }, [location, map])
+
+  return null
+}
 
 export default function PublicMapPage() {
   const { laporan, refreshReports } = useReports()
@@ -132,7 +144,7 @@ export default function PublicMapPage() {
       <section className="public-view">
         <MapContainer
           center={defaultMapCenter}
-          zoom={13}
+          zoom={defaultMapZoom}
           minZoom={5}
           maxBounds={indonesiaBounds}
           maxBoundsViscosity={1}
@@ -140,6 +152,7 @@ export default function PublicMapPage() {
           zoomControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <MapLocationController location={lokasi} />
 
           {groupsData.verified.map((group) => (
             <Marker
