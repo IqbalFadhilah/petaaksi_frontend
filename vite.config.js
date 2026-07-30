@@ -6,15 +6,12 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      // --- TAMBAHAN KRUSIAL UNTUK PUSH NOTIFIKASI ---
-      strategies: 'injectManifest', // Menyuruh Vite memakai sw.js buatan kita sendiri
-      srcDir: 'public',             // Lokasi sw.js kita
-      filename: 'sw.js',            // Nama file service worker kita
+      strategies: 'injectManifest', // Agar Vite memakai sw.js
+      srcDir: 'public',             // Lokasi sw.js
+      filename: 'sw.js',            // Nama file service worker
       injectManifest: {
-        injectionPoint: null,       // Mencegah error build karena kita pakai SW kustom murni
+        injectionPoint: null,       
       },
-      // ----------------------------------------------
-      
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
@@ -22,8 +19,8 @@ export default defineConfig({
         short_name: 'PetaAksi',
         description: 'Aplikasi pemetaan aksi massa real-time',
         theme_color: '#d32f2f',
-        background_color: '#ffffff', // Bagus untuk layar loading awal
-        display: 'standalone',       // WAJIB: Membuat aplikasi full-screen tanpa UI browser saat diinstal
+        background_color: '#ffffff',
+        display: 'standalone', 
         icons: [
           {
             src: 'logo192.png',

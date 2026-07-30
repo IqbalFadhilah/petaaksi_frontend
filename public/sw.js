@@ -1,28 +1,20 @@
 // public/sw.js
-
 const CACHE_NAME = 'petaaksi-cache-v1';
-
-// 1. Daftar aset utama yang WAJIB disimpan pas pertama kali aplikasi dibuka
+//Daftar aset utama yang WAJIB disimpan pas pertama kali aplikasi dibuka
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
 ];
-
-// =========================================================================
-// 🌐 Bagian 1: Logika Siklus Hidup & Penanganan Offline (PWA Cache)
-// =========================================================================
-
 // Event INSTALL: Buka gudang cache dan masukkan aset utama
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('📦 Gudang Cache PetaAksi Berhasil Dibuat!');
+      console.log('Gudang Cache PetaAksi Berhasil Dibuat!');
       return cache.addAll(PRECACHE_ASSETS);
     })
   );
   self.skipWaiting();
 });
-
 // Event ACTIVATE: Bersihkan sampah cache versi lama jika ada pembaruan kode
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -30,7 +22,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('🧹 Menghapus Cache Lama yang Usang:', cache);
+            console.log('Menghapus Cache Lama yang Usang:', cache);
             return caches.delete(cache);
           }
         })
@@ -40,20 +32,15 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Event FETCH: Satpam yang bertugas mengambilkan file dari Cache saat Offline
+// Event FETCH bertugas mengambilkan file dari Cache saat Offline
 self.addEventListener('fetch', (event) => {
-  // Satpam 1: Hanya tangani request pembacaan data (GET). 
-  // Request POST (kirim laporan) GAK BOLEH masuk cache karena bisa error.
   if (event.request.method !== 'GET') return;
-
   event.respondWith(
-    // 🌐 Langkah 1: Coba minta data terbaru ke internet/backend dulu
     fetch(event.request)
       .then((networkResponse) => {
-        // Jika internet lancar dan dapat data (status 200)
+        //JIKA ONLINE, simpan riwayat laporan ke Cache
         if (networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
-          // Buka gudang cache dan perbarui data riwayat laporan terbaru
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
@@ -61,13 +48,11 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       })
       .catch(() => {
-        //JIKA OFFLINE (Internet Mati), otomatis ambil riwayat terakhir dari Cache!
+        //JIKA OFFLINE, otomatis ambil riwayat terakhir dari Cache!
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) {
-            return cachedResponse; // <<--- Pin laporan terakhir bakal muncul di sini!
+            return cachedResponse; 
           }
-          
-          // Jika yang dibuka adalah perpindahan halaman, kembalikan ke index.html PWA
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
@@ -86,8 +71,8 @@ self.addEventListener('push', function(event) {
     
     const options = {
       body: data.body,
-      icon: '/logo-aplikasi-petaaksi-192.png', 
-      badge: '/logo-aplikasi-petaaksi-192.png',
+      icon: '/logo192.png', 
+      badge: '/logo192.png',
       vibrate: [200, 100, 200], 
       data: {
         url: data.url || '/' 

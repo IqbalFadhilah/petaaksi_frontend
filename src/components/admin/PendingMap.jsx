@@ -1,11 +1,11 @@
 import L from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { defaultMapCenter } from '../../constants/map'
-import { getValidityInfo } from '../../utils/reportHelper'
+import { getConfidenceInfo } from '../../utils/reportHelper'
 
 const createClusterIcon = (cluster) => {
-  const reportCount = cluster.reports.length
-  const { label, markerColor } = getValidityInfo(reportCount)
+  const reportCount = cluster.unique_source_count
+  const { label, markerColor } = getConfidenceInfo(cluster.supporting_source_count)
 
   return L.divIcon({
     className: 'report-cluster-icon',
@@ -30,18 +30,18 @@ export default function PendingMap({ groups = [], onSelectGroup }) {
         <MapContainer center={defaultMapCenter} zoom={11} style={{ height: '100%' }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {groups.map((cluster) => {
-            const { label } = getValidityInfo(cluster.reports.length)
+            const { label } = getConfidenceInfo(cluster.supporting_source_count)
 
             return (
               <Marker
                 key={cluster.id}
                 position={[cluster.latitude, cluster.longitude]}
                 icon={createClusterIcon(cluster)}
-                title={`${label}: ${cluster.reports.length} laporan`}
+                title={`${label}: ${cluster.unique_source_count} sumber unik`}
                 eventHandlers={{ click: () => onSelectGroup?.(cluster) }}
               >
                 <Popup>
-                  <strong>{cluster.reports.length} laporan</strong>
+                  <strong>{cluster.unique_source_count} sumber unik</strong>
                   <br />
                   {label}
                 </Popup>

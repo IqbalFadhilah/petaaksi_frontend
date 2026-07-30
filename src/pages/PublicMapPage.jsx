@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
 import { Plus } from 'lucide-react'
 import GlobalLightbox from '../components/GlobalLightbox'
@@ -8,9 +8,8 @@ import ReportModal from '../components/ReportModal'
 import { defaultMapCenter, defaultMapZoom, indonesiaBounds } from '../constants/map'
 import { useDeviceId } from '../hooks/useDeviceId'
 import { usePushNotification } from '../hooks/usePushNotification'
-import { useReports } from '../hooks/useReports'
+import { useReportClusters } from '../hooks/useReportClusters'
 import { submitReport } from '../services/reportService'
-import { buildReportGroups } from '../utils/clustering'
 import { isLocationInIndonesia } from '../utils/geo'
 
 const LAST_REPORT_LOCATION_KEY = 'petaaksi:last-report-location'
@@ -54,10 +53,9 @@ function MapLocationController({ location }) {
 }
 
 export default function PublicMapPage() {
-  const { laporan, refreshReports } = useReports()
+  const { clusters, refreshClusters } = useReportClusters()
   const deviceId = useDeviceId()
-  const pushSubscription = usePushNotification()
-
+  const pushSubscription = usePushNotification() 
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [lokasi, setLokasi] = useState(null)
@@ -71,8 +69,6 @@ export default function PublicMapPage() {
   const [selectedGroup, setSelectedGroup] = useState(null)
   const [fullscreenImage, setFullscreenImage] = useState(null)
   const [initialMapLocation] = useState(getLastReportLocation)
-
-  const groupsData = useMemo(() => buildReportGroups(laporan), [laporan])
 
   const updateFormInput = (nextValue) => {
     setFormInput((prev) => ({ ...prev, ...nextValue }))
@@ -133,7 +129,6 @@ export default function PublicMapPage() {
     formData.append('longitude', lokasi.lng)
     formData.append('fotoKejadian', formInput.foto)
     formData.append('device_id', deviceId)
-
     if (pushSubscription) {
       formData.append('push_subscription', JSON.stringify(pushSubscription))
     }
@@ -150,7 +145,7 @@ export default function PublicMapPage() {
         isDeclarationAccepted: false,
       })
       saveLastReportLocation(lokasi)
-      refreshReports()
+      refreshClusters()
       alert('Laporan Terkirim!')
     } catch (error) {
       console.error('Error Kirim:', error)
@@ -182,7 +177,7 @@ export default function PublicMapPage() {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <MapLocationController location={lokasi} />
 
-          {groupsData.verified.map((group) => (
+          {clusters.map((group) => (
             <Marker
               key={group.id}
               position={[group.latitude, group.longitude]}

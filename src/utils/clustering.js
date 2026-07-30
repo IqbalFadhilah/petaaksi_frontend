@@ -1,4 +1,4 @@
-import { getValidityInfo } from './reportHelper'
+import { getConfidenceInfo } from './reportHelper'
 
 const CLUSTER_RADIUS_METERS = 100
 const CLUSTER_TIME_WINDOW_MS = 3 * 60 * 60 * 1000
@@ -15,9 +15,9 @@ const calculateHaversineDistance = (lat1, lon1, lat2, lon2) => {
       Math.cos((lat2 * Math.PI) / 180) *
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2)
-
+      
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return Math.round(R * c) // Mengembalikan jarak riil dalam Meter
+  return Math.round(R * c) 
 }
 
 const getReportTimestamp = (report) => {
@@ -125,7 +125,7 @@ export const buildReportGroups = (laporan) => {
 
     return clusters.map((cluster) => ({
       ...cluster,
-      status: getValidityInfo(cluster.reports.length).status,
+      status: getConfidenceInfo(Math.max(0, cluster.reports.length - 1)).status,
     }))
   }
 

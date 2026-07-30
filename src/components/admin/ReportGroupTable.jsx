@@ -12,8 +12,11 @@ export default function ReportGroupTable({
   return (
     <div className="panel">
       <div className="panel-header">
-        <h2>Validasi Laporan Masuk</h2>
-        <p>Sistem otomatis mengelompokkan laporan dalam radius kriteria formula Haversine.</p>
+        <h2>Prioritas Pemeriksaan Laporan</h2>
+        <p>
+          Tingkat kepercayaan membantu menentukan prioritas admin berdasarkan dukungan lokasi dan
+          waktu; keputusan akhir tetap dilakukan admin.
+        </p>
       </div>
 
       <div className="group-table">

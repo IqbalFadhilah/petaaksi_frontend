@@ -1,10 +1,13 @@
 import { Clock3, X } from 'lucide-react'
 import { getUploadUrl } from '../services/reportService'
+import { getConfidenceInfo } from '../utils/reportHelper'
 
 export default function PublicBottomSheet({ selectedGroup, onClose, onImageClick }) {
   if (!selectedGroup) return null
 
-  const firstReport = selectedGroup.reports[0]
+  const firstReport = selectedGroup.main_report || selectedGroup.reports[0]
+  const confidence = getConfidenceInfo(selectedGroup.supporting_source_count)
+  const supportingReports = selectedGroup.supporting_reports || []
 
   return (
     <div className="tactical-bottom-sheet">
@@ -19,7 +22,7 @@ export default function PublicBottomSheet({ selectedGroup, onClose, onImageClick
 
       <div className="sheet-badge-row">
         <span className="sheet-badge-success">
-          <span className="dot-circle">OK</span> Terverifikasi Spasial (Validitas Tinggi)
+          <span className="dot-circle">OK</span> Terverifikasi Admin · {confidence.label}
         </span>
       </div>
 
@@ -43,27 +46,28 @@ export default function PublicBottomSheet({ selectedGroup, onClose, onImageClick
         <div className="metric-box">
           <span className="metric-label">Sumber</span>
           <div className="metric-value">
-            {selectedGroup.reports.length} <span className="metric-sub">warga</span>
+            {selectedGroup.unique_source_count} <span className="metric-sub">sumber unik</span>
           </div>
         </div>
         <div className="metric-box">
-          <span className="metric-label">Radius</span>
+          <span className="metric-label">Radius Validasi</span>
           <div className="metric-value">{selectedGroup.radius}</div>
         </div>
       </div>
 
       <div className="sheet-consensus-box">
-        <strong>Didukung oleh {selectedGroup.reports.length - 1} laporan warga lainnya</strong> di
-        radius {selectedGroup.radius}. Sistem spasial memvalidasi semua titik berada dalam klaster
-        yang sama.
+        <strong>Didukung oleh {selectedGroup.supporting_source_count} sumber independen.</strong>{' '}
+        Seluruh laporan pendukung berada maksimal {selectedGroup.radius} dari laporan utama dan
+        dikirim dalam rentang {selectedGroup.time_window_hours} jam. Tingkat kepercayaan merupakan
+        rekomendasi sistem, sedangkan keputusan akhir dilakukan admin.
       </div>
 
-      {selectedGroup.reports.length > 1 && (
+      {supportingReports.length > 0 && (
         <div className="sheet-child-reports-section">
           <h4 className="child-reports-title">Detail Laporan Pendukung</h4>
           <div className="child-reports-list">
-            {selectedGroup.reports.slice(1).map((child, index) => (
-              <div key={`child-node-${index}`} className="child-report-item">
+            {supportingReports.map((child) => (
+              <div key={child.id} className="child-report-item">
                 <div className="child-avatar">
                   {child.pelapor ? child.pelapor.charAt(0).toUpperCase() : 'A'}
                 </div>

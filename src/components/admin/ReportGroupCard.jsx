@@ -8,7 +8,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { getUploadUrl } from '../../services/reportService'
-import { getValidityInfo } from '../../utils/reportHelper'
+import { getConfidenceInfo } from '../../utils/reportHelper'
 
 const formatCoordinates = (latitude, longitude) =>
   `Lat: ${Number(latitude).toFixed(5)} | Lng: ${Number(longitude).toFixed(5)}`
@@ -32,7 +32,7 @@ export default function ReportGroupCard({
   const { latitude, longitude } = group
   const fallbackLocation = formatCoordinates(latitude, longitude)
   const [locationName, setLocationName] = useState(fallbackLocation)
-  const validity = getValidityInfo(group.reports.length)
+  const confidence = getConfidenceInfo(group.supporting_source_count)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -84,18 +84,18 @@ export default function ReportGroupCard({
         </div>
 
         <div className="group-badges">
-          <span className="badge neutral">Konsensus: {group.reports.length} Pelapor</span>
-          <span className={`badge validity-badge ${validity.badgeStyle}`}>
-            {validity.status === 'high' ? <ShieldCheck size={14} /> : <AlertTriangle size={14} />}
-            {validity.label}
+          <span className="badge neutral">Sumber unik: {group.unique_source_count}</span>
+          <span className={`badge validity-badge ${confidence.badgeStyle}`}>
+            {confidence.status === 'high' ? <ShieldCheck size={14} /> : <AlertTriangle size={14} />}
+            {confidence.label}
           </span>
         </div>
 
         <div className="group-actions">
-          <button className="approve-btn" onClick={() => onApproveGroup(group.reports)}>
+          <button className="approve-btn" onClick={() => onApproveGroup(group.id)}>
             Approve
           </button>
-          <button className="reject-btn" onClick={() => onRejectGroup(group.reports)}>
+          <button className="reject-btn" onClick={() => onRejectGroup(group.id)}>
             Tolak
           </button>
         </div>
@@ -112,11 +112,18 @@ export default function ReportGroupCard({
                 onClick={() => onImageClick(getUploadUrl(report.image_url))}
               />
               <div>
-                <strong>Kontributor: {report.pelapor}</strong>
+                <strong>
+                  {report.report_role === 'main' ? 'Laporan Utama' :
+                    report.report_role === 'supporting' ? 'Laporan Pendukung' : 'Laporan Tambahan'}
+                  {' — '}{report.pelapor || 'Anonim'}
+                </strong>
                 {report.title && <p className="report-title">{report.title}</p>}
                 <p>{report.description}</p>
                 <small style={{ fontFamily: 'monospace', color: '#999' }}>
                   Lat: {report.latitude} | Lng: {report.longitude}
+                </small>
+                <small style={{ display: 'block', color: '#777' }}>
+                  Jarak dari laporan utama: {report.distance_from_main_meters} m
                 </small>
               </div>
             </div>
